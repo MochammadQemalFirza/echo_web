@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/lib/pq"
 )
 

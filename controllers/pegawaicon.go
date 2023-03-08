@@ -23,6 +23,7 @@ func FetchPegawai(c echo.Context) error {
 }
 
 func StorePegawai(c echo.Context) error {
+	//form
 	// name := c.FormValue("name")
 	// age := c.FormValue("age")
 	// ages, _ := strconv.Atoi(age)
@@ -32,13 +33,27 @@ func StorePegawai(c echo.Context) error {
 	// 	return c.JSON(http.StatusInternalServerError, err.Error())
 	// }
 	// return c.JSON(http.StatusOK, result)
+
+	//json
 	var req Pegawai
 	if err := c.Bind(&req); err != nil {
-		return err
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	result, err := models.StorePegawai(req.Name, req.Age, req.Position)
 	if err != nil {
-		return err
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusCreated, result)
+}
+
+func UpdatePegawai(c echo.Context) error {
+	var req Pegawai
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	result, err := models.UpdatePegawai(req.Id, req.Name, req.Age, req.Position)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusCreated, result)
 }

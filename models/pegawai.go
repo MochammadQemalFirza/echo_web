@@ -61,3 +61,25 @@ func StorePegawai(name string, age int, position string) (Response, error) {
 	res.Data = result
 	return res, nil
 }
+
+func UpdatePegawai(id int, name string, age int, position string) (Response, error) {
+	var res Response
+	con := config.CreateCon()
+	sqlstatement := "UPDATE pegawai SET name = $1, age = $2, position = $3 WHERE id =$4"
+	stmt, err := con.Prepare(sqlstatement)
+	if err != nil {
+		return res, err
+	}
+	result, err := stmt.Exec(name, age, position, id)
+	if err != nil {
+		return res, err
+	}
+	// rowsAffected, err := result.RowsAffected()
+	// if err != nil{
+	// 	return res, err
+	// }
+	res.Status = http.StatusOK
+	res.Message = "Success"
+	res.Data = result
+	return res, nil
+}

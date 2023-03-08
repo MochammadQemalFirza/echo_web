@@ -3,33 +3,22 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"os"
 
-	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/lib/pq"
 )
 
-var (
-	server   string
-	port     string
-	user     string
-	password string
-	database string
-	sslMode  string
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = 172409
+	dbname   = "pegawai_db"
+	sslmode  = "disable"
 )
 
-func initConst() {
-	server = os.Getenv("DB_HOSTNAME")
-	port = os.Getenv("DB_PORT")
-	user = os.Getenv("DB_USER")
-	password = os.Getenv("DB_PASSWORD")
-	database = os.Getenv("DB_DATABASE")
-	sslMode = os.Getenv("DB_SSLMODE")
-}
-
 func CreateCon() *sql.DB {
-	initConst()
-	psqlConn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%v", server, port, user, password, database, sslMode)
+
+	psqlConn := fmt.Sprintf("host=%s port=%v user=%s password=%v dbname=%s sslmode=%s", host, port, user, password, dbname, sslmode)
 	db, err := sql.Open("postgres", psqlConn)
 	if err != nil {
 		fmt.Println(err.Error())

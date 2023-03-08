@@ -14,6 +14,7 @@ func InitRouter() *echo.Echo {
 	})
 
 	e.GET("/pegawai", controllers.FetchPegawai)
+	e.POST("/pegawai", controllers.StorePegawai)
 
 	return e
 

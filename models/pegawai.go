@@ -34,7 +34,30 @@ func FetchPegawai() (Response, error) {
 		arrobj = append(arrobj, peg)
 	}
 	res.Status = http.StatusOK
-	res.Message = "success"
+	res.Message = "Success"
 	res.Data = arrobj
+	return res, nil
+}
+
+func StorePegawai(name string, age int, position string) (Response, error) {
+	var res Response
+	con := config.CreateCon()
+	sqlstatement := "INSERT INTO pegawai (name, age, position) VALUES($1,$2,$3)"
+
+	stmt, err := con.Prepare(sqlstatement)
+	if err != nil {
+		return res, err
+	}
+	result, err := stmt.Exec(name, age, position)
+	if err != nil {
+		return res, err
+	}
+	// lastInsertedId, err := result.LastInsertId()
+	// if err != nil {
+	// 	return res, err
+	// }
+	res.Status = http.StatusOK
+	res.Message = "Success"
+	res.Data = result
 	return res, nil
 }

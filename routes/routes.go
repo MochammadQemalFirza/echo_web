@@ -10,7 +10,7 @@ import (
 func InitRouter() *echo.Echo {
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Test Echo Framework !")
+		return c.String(http.StatusOK, "Welcome to Pegawai API !")
 	})
 
 	e.GET("/pegawai", controllers.FetchPegawai)

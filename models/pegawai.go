@@ -83,3 +83,21 @@ func UpdatePegawai(id int, name string, age int, position string) (Response, err
 	res.Data = result
 	return res, nil
 }
+
+func DeletePegawai(id int) (Response, error) {
+	var res Response
+	con := config.CreateCon()
+	sqlstatement := "DELETE FROM pegawai WHERE id = $1"
+	stmt, err := con.Prepare(sqlstatement)
+	if err != nil {
+		return res, err
+	}
+	result, err := stmt.Exec(id)
+	if err != nil {
+		return res, err
+	}
+	res.Status = http.StatusOK
+	res.Message = "Success"
+	res.Data = result
+	return res, nil
+}

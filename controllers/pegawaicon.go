@@ -57,3 +57,16 @@ func UpdatePegawai(c echo.Context) error {
 	}
 	return c.JSON(http.StatusCreated, result)
 }
+
+func DeletePegawai(c echo.Context) error {
+	var req Pegawai
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	result, err := models.DeletePegawai(req.Id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+
+	}
+	return c.JSON(http.StatusOK, result)
+}

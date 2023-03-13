@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/MochammadQemalFirza/echo_web/models"
 	"github.com/labstack/echo"
@@ -16,6 +17,16 @@ type Pegawai struct {
 
 func FetchPegawai(c echo.Context) error {
 	result, err := models.FetchPegawai()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
+	}
+	return c.JSON(http.StatusOK, result)
+}
+
+func FetchPegawaiID(c echo.Context) error {
+	id := c.Param("id")
+	idconv, _ := strconv.Atoi(id)
+	result, err := models.FetchPegawaiID(idconv)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
 	}
@@ -48,10 +59,12 @@ func StorePegawai(c echo.Context) error {
 
 func UpdatePegawai(c echo.Context) error {
 	var req Pegawai
+	id := c.Param("id")
+	idconv, _ := strconv.Atoi(id)
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
-	result, err := models.UpdatePegawai(req.Id, req.Name, req.Age, req.Position)
+	result, err := models.UpdatePegawai(idconv, req.Name, req.Age, req.Position)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}

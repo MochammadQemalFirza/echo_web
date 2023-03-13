@@ -39,6 +39,32 @@ func FetchPegawai() (Response, error) {
 	return res, nil
 }
 
+func FetchPegawaiID(id int) (Response, error) {
+	var peg Pegawai
+	// var arrobj []Pegawai
+	var res Response
+	con := config.CreateCon()
+
+	sqlstatement := "SELECT * FROM pegawai WHERE id = $1"
+
+	err := con.QueryRow(sqlstatement, id).Scan(&peg.Id, &peg.Name, &peg.Age, &peg.Position)
+	// defer rows.Close()
+	if err != nil {
+		return res, err
+	}
+	// for rows.Next() {
+	// 	err = rows.Scan(&peg.Id, &peg.Name, &peg.Age, &peg.Position)
+	// 	if err != nil {
+	// 		return res, err
+	// 	}
+
+	// }
+	res.Status = http.StatusOK
+	res.Message = "Success"
+	res.Data = peg
+	return res, nil
+}
+
 func StorePegawai(name string, age int, position string) (Response, error) {
 	var res Response
 	con := config.CreateCon()
@@ -63,6 +89,7 @@ func StorePegawai(name string, age int, position string) (Response, error) {
 }
 
 func UpdatePegawai(id int, name string, age int, position string) (Response, error) {
+	var peg Pegawai
 	var res Response
 	con := config.CreateCon()
 	sqlstatement := "UPDATE pegawai SET name = $1, age = $2, position = $3 WHERE id =$4"
@@ -74,13 +101,25 @@ func UpdatePegawai(id int, name string, age int, position string) (Response, err
 	if err != nil {
 		return res, err
 	}
-	// rowsAffected, err := result.RowsAffected()
-	// if err != nil{
-	// 	return res, err
-	// }
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return res, err
+	}
+
+	sqlstatement = "SELECT * FROM pegawai WHERE id = $1"
+
+	err = con.QueryRow(sqlstatement, id).Scan(&peg.Id, &peg.Name, &peg.Age, &peg.Position)
+	// defer rows.Close()
+	if err != nil {
+		return res, err
+	}
+
 	res.Status = http.StatusOK
 	res.Message = "Success"
-	res.Data = result
+	res.Data = map[string]interface{}{
+		"rows_affected": rowsAffected,
+		"Pegawai":       peg,
+	}
 	return res, nil
 }
 

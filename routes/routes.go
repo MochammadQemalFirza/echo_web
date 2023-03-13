@@ -14,9 +14,11 @@ func InitRouter() *echo.Echo {
 	})
 
 	e.GET("/pegawai", controllers.FetchPegawai)
+	e.GET("/pegawai/:id", controllers.FetchPegawaiID)
 	e.POST("/pegawai", controllers.StorePegawai)
-	e.PUT("/pegawai", controllers.UpdatePegawai)
+	e.PUT("/pegawai/:id", controllers.UpdatePegawai)
 	e.DELETE("/pegawai", controllers.DeletePegawai)
+	e.GET("/generate-hash/:passwrod", controllers.GenerateHashPassword)
 	return e
 
 }
